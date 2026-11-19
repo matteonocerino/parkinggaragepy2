@@ -77,9 +77,10 @@ class ParkingGarage:
         self.red_light_on = False
 
     def manage_red_light(self) -> None:
-        # See User Story #6
-        pass
-
+        if self.get_number_occupied_spots() == 3:
+            self.turn_on_red_light()
+        else:
+            self.turn_off_red_light()
 
     # This method is meant to show you how to release the hardware resources when the program running on real hardware ends.
     def cleanup(self) -> None:

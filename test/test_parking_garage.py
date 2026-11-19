@@ -118,3 +118,18 @@ class TestParkingGarage(TestCase):
         mock_output.assert_called_once_with(ParkingGarage.LED_PIN, False)
         self.assertFalse(parking_garage.red_light_on)
 
+    @patch.object(ParkingGarage, "get_number_occupied_spots")
+    @patch.object(ParkingGarage, "turn_on_red_light")
+    def test_manage_red_light_garage_full(self, mock_turn_on: MagicMock, mock_spots: MagicMock):
+        mock_spots.return_value = 3
+        parking_garage = ParkingGarage()
+        parking_garage.manage_red_light()
+        mock_turn_on.assert_called_once()
+
+    @patch.object(ParkingGarage, "get_number_occupied_spots")
+    @patch.object(ParkingGarage, "turn_off_red_light")
+    def test_manage_red_light_garage_not_full(self, mock_turn_off: MagicMock, mock_spots: MagicMock):
+        mock_spots.return_value = 2
+        parking_garage = ParkingGarage()
+        parking_garage.manage_red_light()
+        mock_turn_off.assert_called_once()
