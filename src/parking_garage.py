@@ -27,11 +27,12 @@ class ParkingGarage:
         self.servo = GPIO.PWM(self.SERVO_PIN, 50)
         self.servo.start(5)
         self.door_open = False
-        self.red_light_on = None # Variable not initialize yet (see User Story #5)
+        self.red_light_on = False
         GPIO.setup(self.INFRARED_PIN1, GPIO.IN)
         GPIO.setup(self.INFRARED_PIN2, GPIO.IN)
         GPIO.setup(self.INFRARED_PIN3, GPIO.IN)
         GPIO.setup(self.SERVO_PIN, GPIO.OUT)
+        GPIO.setup(self.LED_PIN, GPIO.OUT)
 
 
     def check_occupancy(self, pin: int) -> bool:
@@ -68,12 +69,12 @@ class ParkingGarage:
         self.door_open = False
 
     def turn_on_red_light(self) -> None:
-        # See User Story #5
-        pass
+        GPIO.output(self.LED_PIN, True)
+        self.red_light_on = True
 
     def turn_off_red_light(self) -> None:
-        # See User Story #5
-        pass
+        GPIO.output(self.LED_PIN, False)
+        self.red_light_on = False
 
     def manage_red_light(self) -> None:
         # See User Story #6

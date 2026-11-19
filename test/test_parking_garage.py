@@ -96,3 +96,25 @@ class TestParkingGarage(TestCase):
         parking_garage.close_garage_door()
         mock_change.assert_called_once_with(5)
         self.assertFalse(parking_garage.door_open)
+
+    @patch.object(GPIO, "setup")
+    def test_red_light_configuration(self, mock_setup: MagicMock):
+        parking_garage = ParkingGarage()
+        mock_setup.assert_any_call(ParkingGarage.LED_PIN, GPIO.OUT)
+        self.assertFalse(parking_garage.red_light_on)
+
+    @patch.object(GPIO, "output")
+    def test_turn_on_red_light(self, mock_output: MagicMock):
+        parking_garage = ParkingGarage()
+        parking_garage.turn_on_red_light()
+        mock_output.assert_called_once_with(ParkingGarage.LED_PIN, True)
+        self.assertTrue(parking_garage.red_light_on)
+
+    @patch.object(GPIO, "output")
+    def test_turn_off_red_light(self, mock_output: MagicMock):
+        parking_garage = ParkingGarage()
+        parking_garage.red_light_on = True
+        parking_garage.turn_off_red_light()
+        mock_output.assert_called_once_with(ParkingGarage.LED_PIN, False)
+        self.assertFalse(parking_garage.red_light_on)
+
