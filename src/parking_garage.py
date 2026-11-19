@@ -24,12 +24,14 @@ class ParkingGarage:
         GPIO.setmode(GPIO.BOARD) # Set the numbering schema to bord mode
         GPIO.setwarnings(False)
         self.rtc = SDL_DS3231.SDL_DS3231()
-        self.servo = None # Variable not initialize yet (see User Story #4)
-        self.door_open = None # Variable not initialize yet (see User Story #4)
+        self.servo = GPIO.PWM(self.SERVO_PIN, 50)
+        self.servo.start(5)
+        self.door_open = False
         self.red_light_on = None # Variable not initialize yet (see User Story #5)
         GPIO.setup(self.INFRARED_PIN1, GPIO.IN)
         GPIO.setup(self.INFRARED_PIN2, GPIO.IN)
         GPIO.setup(self.INFRARED_PIN3, GPIO.IN)
+        GPIO.setup(self.SERVO_PIN, GPIO.OUT)
 
 
     def check_occupancy(self, pin: int) -> bool:
@@ -58,12 +60,12 @@ class ParkingGarage:
         return tot * 2.5
 
     def open_garage_door(self) -> None:
-        # See User Story #4
-        pass
+        self.servo.ChangeDutyCycle(10)
+        self.door_open = True
 
     def close_garage_door(self) -> None:
-        # See User Story #4
-        pass
+        self.servo.ChangeDutyCycle(5)
+        self.door_open = False
 
     def turn_on_red_light(self) -> None:
         # See User Story #5
